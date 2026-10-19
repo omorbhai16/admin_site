@@ -9,16 +9,6 @@
       "type": "Shorts",
       "price": "$300",
       "admin": "Jahid Hassan"
-    },
-    {
-      "photo": "review_2.jpg",
-      "day": "Monday",
-      "time": "5:10 PM",
-      "date": "19/08/2026",
-      "deal": "2",
-      "type": "Long Video",
-      "price": "$450",
-      "admin": "Jahid Hassan"
     }
   ]
 }
