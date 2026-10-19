@@ -1,0 +1,34 @@
+{
+  "channels": [
+    {
+      "id": "01",
+      "number": "01",
+      "status": "sold",
+      "price": "৳ 37,000",
+      "total_views": "104M",
+      "views_48h": "247.6K",
+      "views_30d": "10.7M",
+      "subscribers": "22.4K",
+      "monetization": "Monetized",
+      "shorts": "186",
+      "long": "7",
+      "category": "Film & Animation",
+      "photos": ["number_1.jpg", "number_2.jpg", "number_3.jpg", "number_4.jpg", "number_5.jpg"]
+    },
+    {
+      "id": "02",
+      "number": "02",
+      "status": "Available",
+      "price": "৳ 2,500",
+      "total_views": "9.02M",
+      "views_48h": "2.7M",
+      "views_30d": "9.02M",
+      "subscribers": "7,390",
+      "monetization": "Not monetized",
+      "shorts": "5",
+      "long": "0",
+      "category": "Entertainment",
+      "photos": ["number_1.jpg", "number_2.jpg", "number_3.jpg", "number_4.jpg", "number_5.jpg"]
+    }
+  ]
+}
