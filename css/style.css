@@ -520,13 +520,49 @@ nav a:focus-visible {
 /* ==========================================================================
    12. Contact
    ========================================================================== */
-.contact-btns {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 18px;
-}
+   /* Contact Section Center Alignment */
+  .contact-section {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  }
 
+  .contact-section h2,
+  .contact-section p {
+  text-align: center;
+  }
+
+  .contact-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  }
+
+  .contact-btns .btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  }
+
+  .contact-btns .whatsapp-btn {
+  background-color: #25D366;
+  color: #fff;
+  }
+
+  .contact-btns .telegram-btn {
+  background-color: #229ED9;
+  color: #fff;
+  }
+
+  .contact-btns .btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  }
 
 /* ==========================================================================
    13. Footer & Social
@@ -539,33 +575,38 @@ footer {
 }
 
 .social {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 22px;
-  margin-top: 14px;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 20px;
+flex-wrap: wrap;
+margin-top: 15px;
 }
 
 .social a {
-  color: #fff;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.25s;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+text-decoration: none;
+font-weight: 600;
+transition: 0.3s;
 }
 
 .social a:hover {
-  color: #ff5a52;
-  transform: translateY(-3px);
+opacity: 0.8;
+transform: translateY(-2px);
 }
 
-/* গোল WhatsApp আইকন */
-.wa {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  background: var(--red);
-  border-radius: 50%;
+.social .wa {
+color: #25D366;
+}
+
+.social .telegram {
+color: #229ED9;
+}
+
+.social svg {
+flex-shrink: 0;
 }
 
 
