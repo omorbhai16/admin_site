@@ -5,7 +5,7 @@
      2. Utils          — ছোট সাহায্যকারী ফাংশন
      3. Navigation     — মেনু ও পেজ পরিবর্তন
      4. Lightbox       — ছবি বড় করে দেখানো
-     5. ChannelList    — চ্যানেল কার্ড তৈরি
+     5. ChannelList    — চ্যানেল কার্ড তৈরি + ফিল্টার (সব / Available / Sold)
      6. ReviewList     — রিভিউ কার্ড তৈরি
      7. FallingLogos   — পড়ন্ত YouTube লোগো
      8. App            — সব ক্লাস চালু করে
@@ -151,29 +151,179 @@ class Lightbox {
 
 
 /* ==========================================================================
-   5. ChannelList — চ্যানেল কার্ড তৈরি
+   5. ChannelList — চ্যানেল কার্ড তৈরি + ফিল্টার
    ছবি আসে channel_photo/<id>/<ফাইল> থেকে,
    তাই এক চ্যানেলের ছবি অন্য চ্যানেলে মিশবে না।
+
+   ফিল্টার: "সব চ্যানেল" / "Available" / "Sold"
+   বাটনগুলো এই ক্লাস নিজেই Channel Phone পেজে বসিয়ে দেয়,
+   তাই index.html বা style.css বদলাতে হয় না।
    ========================================================================== */
 class ChannelList {
   constructor() {
     this.container = Utils.$("#channelList");
+    this.channels = [];
+    this.filter = "all"; // all | available | sold
+    this.filterBar = null;
   }
 
   async init() {
     try {
       const data = await Utils.loadJson(CONFIG.channelsJson);
-      this.render(data.channels || []);
+      this.channels = data.channels || [];
+      this.injectStyles();
+      this.buildFilterBar();
+      this.render();
     } catch {
       this.container.innerHTML =
         "<p>তথ্য লোড হয়নি। Live Server বা হোস্টিং-এ চালান।</p>";
     }
   }
 
-  render(channels) {
-    this.container.innerHTML =
-      channels.map((channel) => this.buildCard(channel)).join("") ||
-      "<p>এখনো কোনো চ্যানেল যোগ করা হয়নি।</p>";
+  /* ---------- ফিল্টার ---------- */
+
+  /** ফিল্টার বাটনের স্টাইল (JS থেকেই যোগ হয়) */
+  injectStyles() {
+    const style = document.createElement("style");
+    style.textContent = `
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 26px;
+      }
+      .filter-btn {
+        padding: 10px 20px;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+        font-weight: 700;
+        border: 2px solid var(--ink);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: 0.25s;
+      }
+      .filter-btn:hover {
+        border-color: var(--red);
+        color: var(--red);
+        transform: translateY(-2px);
+      }
+      .filter-btn.active {
+        background: var(--red);
+        border-color: var(--red);
+        color: #fff;
+      }
+      .filter-btn[data-filter="available"].active {
+        background: var(--green);
+        border-color: var(--green);
+      }
+      .filter-btn:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 2px;
+      }
+      .filter-btn .count {
+        margin-left: 6px;
+        padding: 1px 8px;
+        font-size: 0.85rem;
+        background: rgba(0, 0, 0, 0.08);
+        border-radius: 20px;
+      }
+      .filter-btn.active .count {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .filter-empty {
+        padding: 30px 0;
+        color: var(--muted);
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  /** ফিল্টার বাটনের বার তৈরি করে চ্যানেল লিস্টের ঠিক উপরে বসায় */
+  buildFilterBar() {
+    this.filterBar = document.createElement("div");
+    this.filterBar.className = "filter-bar";
+    this.filterBar.setAttribute("role", "group");
+    this.filterBar.setAttribute("aria-label", "চ্যানেল ফিল্টার");
+
+    this.filterBar.addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
+      this.filter = btn.dataset.filter;
+      this.render();
+    });
+
+    this.container.before(this.filterBar);
+  }
+
+  /**
+   * বাটনের সংখ্যা আসে index.html-এর হোম পেজের কাউন্টার বক্স থেকে
+   * (১ম = চ্যানেল এখনো আছে, ২য় = বিক্রি হয়েছে, ৩য় = মোট)।
+   * ওখানে সংখ্যা বদলালেই বাটনের সংখ্যাও বদলে যাবে।
+   * সংখ্যা না পাওয়া গেলে channels.json থেকে গুনে নেবে।
+   */
+  readCounts() {
+    const toNumber = (text) => {
+      // বাংলা অঙ্ক (০-৯) থাকলে ইংরেজিতে বদলে নেয়
+      const en = String(text).replace(/[০-৯]/g, (d) => "০১২৩৪৫৬৭৮৯".indexOf(d));
+      const n = parseInt(en.replace(/[^\d]/g, ""), 10);
+      return Number.isNaN(n) ? null : n;
+    };
+
+    const boxes = [...document.querySelectorAll(".stats b")].map((b) => toNumber(b.textContent));
+
+    const soldFromJson = this.channels.filter((c) => this.isSold(c)).length;
+    return {
+      available: boxes[0] ?? this.channels.length - soldFromJson,
+      sold: boxes[1] ?? soldFromJson,
+      all: boxes[2] ?? this.channels.length,
+    };
+  }
+
+  /** ফিল্টার বাটন আঁকে (সংখ্যাসহ) ও সক্রিয়টা চিহ্নিত করে */
+  renderFilterBar() {
+    const counts = this.readCounts();
+    const options = [
+      ["all", "সব চ্যানেল"],
+      ["available", "Available"],
+      ["sold", "Sold"],
+    ];
+
+    this.filterBar.innerHTML = options
+      .map(
+        ([key, label]) => `
+        <button type="button" class="filter-btn ${this.filter === key ? "active" : ""}"
+          data-filter="${key}" aria-pressed="${this.filter === key}">
+          ${label}<span class="count">${counts[key]}</span>
+        </button>`
+      )
+      .join("");
+  }
+
+  /** বর্তমান ফিল্টার অনুযায়ী চ্যানেল বেছে নেয় */
+  filtered() {
+    if (this.filter === "available") return this.channels.filter((c) => !this.isSold(c));
+    if (this.filter === "sold") return this.channels.filter((c) => this.isSold(c));
+    return this.channels;
+  }
+
+  /* ---------- কার্ড ---------- */
+
+  render() {
+    this.renderFilterBar();
+
+    const list = this.filtered();
+    if (list.length) {
+      this.container.innerHTML = list.map((channel) => this.buildCard(channel)).join("");
+      return;
+    }
+
+    const messages = {
+      all: "এখনো কোনো চ্যানেল যোগ করা হয়নি।",
+      available: "এই মুহূর্তে কোনো চ্যানেল Available নেই।",
+      sold: "এখনো কোনো চ্যানেল বিক্রি হয়নি।",
+    };
+    this.container.innerHTML = `<p class="filter-empty">${messages[this.filter]}</p>`;
   }
 
   /** চ্যানেল বিক্রি হয়েছে কি না */
