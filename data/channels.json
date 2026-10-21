@@ -45,7 +45,7 @@
       "category": "Gaming",
       "photos": ["number_1.jpg", "number_2.jpg", "number_3.jpg", "number_4.jpg", "number_5.jpg"]
     },
-            {
+      {
       "id": "04",
       "number": "04",
       "status": "Available",
@@ -57,6 +57,21 @@
       "monetization": "Monetized",
       "shorts": "36",
       "long": "1",
+      "category": "Gaming",
+      "photos": ["number_1.jpg", "number_2.jpg", "number_3.jpg", "number_4.jpg", "number_5.jpg"]
+    },
+          {
+      "id": "05",
+      "number": "05",
+      "status": "Available",
+      "price": "৳ 3,000",
+      "total_views": "14.10M",
+      "views_48h": "35k",
+      "views_30d": "1.30M",
+      "subscribers": "8.0K",
+      "monetization": "Monetized",
+      "shorts": "530",
+      "long": "37",
       "category": "Gaming",
       "photos": ["number_1.jpg", "number_2.jpg", "number_3.jpg", "number_4.jpg", "number_5.jpg"]
     }
