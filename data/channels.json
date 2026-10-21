@@ -44,6 +44,21 @@
       "long": "0",
       "category": "Gaming",
       "photos": ["number_1.jpg", "number_2.jpg", "number_3.jpg", "number_4.jpg", "number_5.jpg"]
+    },
+            {
+      "id": "04",
+      "number": "04",
+      "status": "Available",
+      "price": "৳ 5,300",
+      "total_views": "4.90M",
+      "views_48h": "233k",
+      "views_30d": "4.30M",
+      "subscribers": "11.8K",
+      "monetization": "Monetized",
+      "shorts": "36",
+      "long": "1",
+      "category": "Gaming",
+      "photos": ["number_1.jpg", "number_2.jpg", "number_3.jpg", "number_4.jpg", "number_5.jpg"]
     }
   ]
 }
