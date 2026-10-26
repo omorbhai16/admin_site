@@ -33,7 +33,7 @@
     {
       "id": "03",
       "number": "03",
-      "status": "Sold",
+      "status": "Available",
       "price": "৳ 10,500",
       "total_views": "28.20M",
       "views_48h": "1.3M",
@@ -48,7 +48,7 @@
     {
       "id": "04",
       "number": "04",
-      "status": "Available",
+      "status": "Sold",
       "price": "৳ 5,300",
       "total_views": "4.90M",
       "views_48h": "233k",
@@ -63,7 +63,7 @@
     {
       "id": "05",
       "number": "05",
-      "status": "Available",
+      "status": "Sold",
       "price": "৳ 3,500",
       "total_views": "14.10M",
       "views_48h": "35k",
